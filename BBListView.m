@@ -28,18 +28,16 @@
 
 - (void)viewDidMoveToWindow 
 {
-    
-    NSLog(@"here");
-    
-    trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
-                                                options:NSTrackingMouseMoved+NSTrackingActiveInKeyWindow+NSTrackingMouseEnteredAndExited
-                                                  owner:self
-                                               userInfo:nil];
-    [self addTrackingArea:trackingArea];
-    [self becomeFirstResponder];
-    
        
-    
+    if (trackingArea == nil) {
+        trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                    options:NSTrackingMouseMoved+NSTrackingActiveInKeyWindow+NSTrackingMouseEnteredAndExited
+                                                      owner:self
+                                                   userInfo:nil];
+        [self addTrackingArea:trackingArea];
+        [self becomeFirstResponder];  
+    }
+        
 }
 
 #pragma mark -
@@ -58,16 +56,16 @@
 }
 
 - (void)tile
-{
+{    
     [super tile];
     
     [self setAutohidesScrollers:NO];
-    [[self verticalScroller] removeFromSuperview];
     
+    [[self verticalScroller] removeFromSuperview];    
     [[self contentView] setFrame:[self bounds]];
-    [self addSubview:[self verticalScroller]];
+    [self addSubview:[self verticalScroller]];    
     
-    
+    [[self verticalScroller] setHidden:YES];
 }
 #pragma mark -
 #pragma mark Animation
@@ -78,11 +76,7 @@
     transition.duration = 0.5;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
-    if (show) {
-        transition.type = kCATransitionFade;
-    } else {
-        transition.type = kCATransitionFade;
-    }
+    transition.type = kCATransitionFade; 
     
     [[[self verticalScroller] layer] addAnimation:transition forKey:nil];
     
@@ -108,9 +102,5 @@
     
 }
 
--(void)mouseMoved:(NSEvent *)theEvent 
-{
-    
-}
 
 @end
